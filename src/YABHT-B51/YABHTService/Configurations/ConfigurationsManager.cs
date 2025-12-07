@@ -28,7 +28,11 @@ namespace YABHTService.Configurations
 
 			var configFiles = Directory.GetFiles(path.FullName).Where(e => e.EndsWith(".yabht-b51-config")).ToArray();
 			_logger.Info($"Found {configFiles.Count()} config files.");
-			
+
+			if (!configFiles.Any())
+			{
+				CreateExampleFile(path);
+			}
 			
 			var configurations = new List<RepositoryConfiguration>();
 			
@@ -47,5 +51,15 @@ namespace YABHTService.Configurations
 
 			return configurations;
 		}
-	}
+
+		private void CreateExampleFile(FileInfo path)
+		{
+			var exampleConfiguration = new RepositoryConfiguration();
+			var json = JsonConvert.SerializeObject(exampleConfiguration, Formatting.Indented);
+			
+			var file = Path.Combine(path.FullName, "example.yabht-b51-config");
+			_logger.Info($"Creating example configuration file '{file}'.");
+			File.WriteAllText(file, json);
+		}
+    }
 }
