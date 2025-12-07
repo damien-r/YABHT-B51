@@ -6,10 +6,15 @@ namespace YABHTService.Configurations
     internal class ConfigurationsManager
     {
 
-		private static readonly ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		private readonly IConfiguration _configuration;
 
-		public IList<RepositoryConfiguration> GetRepositories()
+        public ConfigurationsManager(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public IList<RepositoryConfiguration> GetRepositories()
 		{
 			var configurationsFolder = _configuration.GetSection("YABHT").GetSection("General").GetValue("ConfigurationFolder", "Configs");
 
