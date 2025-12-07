@@ -15,13 +15,11 @@ internal class RepositoriesManager
         Commands.Stage(repository, "*");
         
         var status = repository.RetrieveStatus();
-        int fileCount = status
-            .Count(s => s.State != FileStatus.Ignored &&
-                        s.State != FileStatus.Unaltered);
+        int fileCount = status.Count(s => s.State != FileStatus.Ignored && s.State != FileStatus.Unaltered);
         
         if(fileCount > 0) _logger.Info($"Backup repository '{repositoryConfiguration.Name}' with {fileCount} files.");
         var now = DateTimeOffset.Now;
-        var author = new Signature("YABHT", "", now);
+        var author = new Signature("YABHT-B51", "YABHT-B51@no-reply.com", now);
         var commit = repository.Commit($"[YABHT] Automated backup at {now} ", author, author);
     }
 }
