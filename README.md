@@ -7,3 +7,7 @@ You can use and fork this tool as you want. However, I don't offer any support o
 ## Technology
 
 The underlying technology is Git. So it is especially adapted for textual elements to backup. I wrote it to keep an history of my [Obsidian](https://obsidian.md/) vault(s).
+
+## Installation
+
+See https://learn.microsoft.com/en-us/dotnet/core/extensions/windows-service
