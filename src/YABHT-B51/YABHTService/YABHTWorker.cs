@@ -1,5 +1,6 @@
 using log4net;
 using YABHTService.Configurations;
+using YABHTService.Repositories;
 
 namespace YABHTService
 {
@@ -10,11 +11,13 @@ namespace YABHTService
         private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IConfiguration _configuration;
         private readonly ConfigurationsManager _configurationsManager;
+        private RepositoriesManager _repositoriesManager;
 
-        public YABHTWorker(IConfiguration configuration, ConfigurationsManager configurationsManager)
+        public YABHTWorker(IConfiguration configuration, ConfigurationsManager configurationsManager, RepositoriesManager repositoriesManager)
         {
             _configuration = configuration;
             _configurationsManager = configurationsManager;
+            _repositoriesManager = repositoriesManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -38,9 +41,11 @@ namespace YABHTService
 
         private void Loop()
         {
-            _configurationsManager.GetRepositories();
-
-            throw new NotImplementedException();
+            var repositoryConfigurations = _configurationsManager.GetRepositories();
+            foreach (var repositoryConfiguration in repositoryConfigurations)
+            {
+                _repositoriesManager.BackupRepository(repositoryConfiguration);
+            }
         }
     }
 }
