@@ -17,13 +17,16 @@ namespace YABHTService.Configurations
         public IList<RepositoryConfiguration> GetRepositories()
 		{
 			var configurationsFolder = _configuration.GetSection("YABHT").GetSection("General").GetValue("ConfigurationFolder", "AppData/Configurations");
-
-			if (!Directory.Exists(configurationsFolder))
-			{
 				var path = new FileInfo(configurationsFolder);
+
+			if (!path.Exists)
+			{
 				_logger.Warn($"Configurations folder '{path.FullName}' does not exist.");
 				return new List<RepositoryConfiguration>();
 			}
+
+			var configFiles = Directory.GetFiles(path.FullName).Where(e => e.EndsWith(".yabht-b51-config"));
+			_logger.Info($"Found {configFiles.Count()} config files.");
 
 			throw new NotImplementedException();
 		}
