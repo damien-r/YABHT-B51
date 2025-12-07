@@ -1,15 +1,15 @@
 namespace YABHTService
 {
-    public class YABHTWorker(ILogger<YABHTWorker> logger) : BackgroundService
+
+
+    public class YABHTWorker() : BackgroundService
     {
+        private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                }
+                _logger.Debug("Worker running");
                 await Task.Delay(1000, stoppingToken);
             }
         }
