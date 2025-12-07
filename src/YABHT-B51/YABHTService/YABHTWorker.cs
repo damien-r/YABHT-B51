@@ -1,6 +1,6 @@
 namespace YABHTService
 {
-    public class Worker(ILogger<Worker> logger) : BackgroundService
+    public class YABHTWorker(ILogger<YABHTWorker> logger) : BackgroundService
     {
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
