@@ -22,11 +22,13 @@ namespace YABHTService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.Info("================================================================================");
+            _logger.Info("YABHT Service started");
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.Debug("Worker running");
                 try
                 {
+                    _logger.Debug("--------------------------------------------------------------------------------");
                     Loop();
                 }
                 catch (Exception ex)
@@ -37,6 +39,7 @@ namespace YABHTService
                 _logger.Debug($"Job done. Waiting for {runningRate}");
                 await Task.Delay(runningRate, stoppingToken);
             }
+            _logger.Info("YABHT Service stopped");
         }
 
         private void Loop()
