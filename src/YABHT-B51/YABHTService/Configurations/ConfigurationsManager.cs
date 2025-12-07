@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Newtonsoft.Json;
 using YABHTService.Configurations.Models;
 
 namespace YABHTService.Configurations
@@ -27,6 +28,15 @@ namespace YABHTService.Configurations
 
 			var configFiles = Directory.GetFiles(path.FullName).Where(e => e.EndsWith(".yabht-b51-config"));
 			_logger.Info($"Found {configFiles.Count()} config files.");
+			
+			
+			var configurations = new List<RepositoryConfiguration>();
+			
+			foreach (var configFile in configFiles)
+			{
+				var repositoryConfiguration = JsonConvert.DeserializeObject<RepositoryConfiguration>(File.ReadAllText(configFile));
+				configurations.Add(repositoryConfiguration);
+			}
 
 			throw new NotImplementedException();
 		}
