@@ -17,7 +17,8 @@ namespace YABHTService.Configurations
 
         public IList<RepositoryConfiguration> GetRepositories()
 		{
-			var configurationsFolder = _configuration.GetSection("YABHT").GetSection("General").GetValue("ConfigurationFolder", "AppData/Configurations");
+			var defaultConfigurationsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "B51/YABHT-B51/AppData/Configurations");
+			var configurationsFolder = _configuration.GetSection("YABHT").GetSection("General").GetValue("ConfigurationFolder", defaultConfigurationsFolder);
 			var path = new FileInfo(configurationsFolder);
 
 			if (!Directory.Exists(path.FullName))
