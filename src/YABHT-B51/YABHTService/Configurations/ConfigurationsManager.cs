@@ -17,9 +17,9 @@ namespace YABHTService.Configurations
         public IList<RepositoryConfiguration> GetRepositories()
 		{
 			var configurationsFolder = _configuration.GetSection("YABHT").GetSection("General").GetValue("ConfigurationFolder", "AppData/Configurations");
-				var path = new FileInfo(configurationsFolder);
+			var path = new FileInfo(configurationsFolder);
 
-			if (!path.Exists)
+			if (!Directory.Exists(path.FullName))
 			{
 				_logger.Warn($"Configurations folder '{path.FullName}' does not exist.");
 				return new List<RepositoryConfiguration>();
