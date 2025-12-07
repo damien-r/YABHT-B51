@@ -21,7 +21,6 @@ internal class RepositoriesManager
         if (_configuration.GetValue<bool>("YABHT:General:AllowUnsafeRepositories"))
         {
             // Avoid problems with a different owner of the repository when running as a service
-            _logger.Debug("Set safe");
             GlobalSettings.SetOwnerValidation(false);
         }
 
