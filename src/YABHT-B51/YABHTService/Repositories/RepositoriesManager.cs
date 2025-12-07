@@ -7,15 +7,21 @@ namespace YABHTService.Repositories;
 internal class RepositoriesManager
 {
 		private static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-    public void BackupRepository(RepositoryConfiguration repositoryConfiguration)
+		private readonly IConfiguration _configuration;
+
+        public RepositoriesManager(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
+        public void BackupRepository(RepositoryConfiguration repositoryConfiguration)
     {
-        if (repositoryConfiguration.SafeRepository)
+        if (_configuration.GetValue<bool>("YABHT:General:AllowUnsafeRepositories"))
         {
             // Avoid problems with a different owner of the repository when running as a service
             _logger.Debug("Set safe");
-            Configuration
-                .BuildFrom(repositoryConfiguration.RepositoryPath)
-                .Add("safe.directory", "*", ConfigurationLevel.Global);
+            GlobalSettings.SetOwnerValidation(false);
         }
         
         _logger.Debug($"Analyze repository '{repositoryConfiguration.Name}'");

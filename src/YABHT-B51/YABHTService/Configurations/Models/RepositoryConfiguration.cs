@@ -10,7 +10,5 @@
         /// </summary>
         public string RepositoryPath { get; set; }
         
-        public bool SafeRepository { get; set; }
-        
     }
 }
