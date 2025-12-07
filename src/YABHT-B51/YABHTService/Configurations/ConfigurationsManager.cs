@@ -26,7 +26,7 @@ namespace YABHTService.Configurations
 				return new List<RepositoryConfiguration>();
 			}
 
-			var configFiles = Directory.GetFiles(path.FullName).Where(e => e.EndsWith(".yabht-b51-config"));
+			var configFiles = Directory.GetFiles(path.FullName).Where(e => e.EndsWith(".yabht-b51-config")).ToArray();
 			_logger.Info($"Found {configFiles.Count()} config files.");
 			
 			
@@ -34,11 +34,18 @@ namespace YABHTService.Configurations
 			
 			foreach (var configFile in configFiles)
 			{
-				var repositoryConfiguration = JsonConvert.DeserializeObject<RepositoryConfiguration>(File.ReadAllText(configFile));
-				configurations.Add(repositoryConfiguration);
+				try
+				{
+					_logger.Debug($"Reading configuration file '{configFile}'.");
+					var repositoryConfiguration = JsonConvert.DeserializeObject<RepositoryConfiguration>(File.ReadAllText(configFile));
+					configurations.Add(repositoryConfiguration);
+				} catch (Exception ex)
+				{
+					_logger.Error($"Error while reading configuration file '{configFile}'.", ex);
+				}
 			}
 
-			throw new NotImplementedException();
+			return configurations;
 		}
 	}
 }
