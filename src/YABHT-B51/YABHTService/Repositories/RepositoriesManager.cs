@@ -55,20 +55,10 @@ internal class RepositoriesManager
                 continue;
             }
 
-            var options = new PushOptions();
-            if (!string.IsNullOrEmpty(pushConfiguration.Username))
-            {
-                options.CredentialsProvider = (_, _, _) => new UsernamePasswordCredentials
-                {
-                    Username = pushConfiguration.Username,
-                    Password = pushConfiguration.Password ?? string.Empty
-                };
-            }
-
             try
             {
                 var pushRefSpec = $"refs/heads/{repository.Head.FriendlyName}:refs/heads/{repository.Head.FriendlyName}";
-                repository.Network.Push(remote, pushRefSpec, options);
+                repository.Network.Push(remote, pushRefSpec);
             }
             catch (Exception ex)
             {
