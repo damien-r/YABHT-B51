@@ -40,6 +40,7 @@ internal class RepositoriesManager
             var commit = repository.Commit($"[YABHT] Automated backup at {now} ", author, author);
 
             Push(repositoryConfiguration, repository);
+            _logger.Debug($"Commit done");
         }
     }
 
@@ -59,6 +60,7 @@ internal class RepositoriesManager
             {
                 var pushRefSpec = $"refs/heads/{repository.Head.FriendlyName}:refs/heads/{repository.Head.FriendlyName}";
                 repository.Network.Push(remote, pushRefSpec);
+                _logger.Debug($"Push done");
             }
             catch (Exception ex)
             {
