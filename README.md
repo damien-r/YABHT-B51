@@ -7,3 +7,11 @@ You can use and fork this tool as you want. However, I don't offer any support o
 ## Technology
 
 The underlying technology is Git. So it is especially adapted for textual elements to backup. I wrote it to keep an history of my [Obsidian](https://obsidian.md/) vault(s).
+
+## Configuration
+
+The configuration files have to be put under `C:\ProgramData\B51\YABHT-B51\AppData\Configurations` (configurable)
+
+## Logs
+
+By default, logs are ine `C:\ProgramData\B51\YABHT-B51\Logs`.

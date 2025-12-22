@@ -10,5 +10,7 @@
         /// </summary>
         public string RepositoryPath { get; set; }
         
+        public IList<PushConfiguration> PushConfigurations { get; set; } = new List<PushConfiguration>();
+        
     }
 }

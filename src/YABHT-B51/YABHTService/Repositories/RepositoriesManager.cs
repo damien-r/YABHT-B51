@@ -21,7 +21,6 @@ internal class RepositoriesManager
         if (_configuration.GetValue<bool>("YABHT:General:AllowUnsafeRepositories"))
         {
             // Avoid problems with a different owner of the repository when running as a service
-            _logger.Debug("Set safe");
             GlobalSettings.SetOwnerValidation(false);
         }
 
@@ -39,7 +38,34 @@ internal class RepositoriesManager
             var now = DateTimeOffset.Now;
             var author = new Signature("YABHT-B51", "YABHT-B51@no-reply.com", now);
             var commit = repository.Commit($"[YABHT] Automated backup at {now} ", author, author);
+
+            Push(repositoryConfiguration, repository);
+            _logger.Debug($"Commit done");
         }
     }
 
+    private void Push(RepositoryConfiguration repositoryConfiguration, Repository repository)
+    {
+        foreach (var pushConfiguration in repositoryConfiguration.PushConfigurations)
+        {
+            _logger.Info($"Push to remote '{pushConfiguration.RemoteName}'");
+            var remote = repository.Network.Remotes[pushConfiguration.RemoteName];
+            if (remote == null)
+            {
+                _logger.Error($"Remote '{pushConfiguration.RemoteName}' not found in repository '{repositoryConfiguration.Name}'");
+                continue;
+            }
+
+            try
+            {
+                var pushRefSpec = $"refs/heads/{repository.Head.FriendlyName}:refs/heads/{repository.Head.FriendlyName}";
+                repository.Network.Push(remote, pushRefSpec);
+                _logger.Debug($"Push done");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to push to remote '{pushConfiguration.RemoteName}'", ex);
+            }
+        }
+    }
 }
