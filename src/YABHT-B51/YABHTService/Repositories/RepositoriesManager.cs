@@ -38,7 +38,16 @@ internal class RepositoriesManager
             var now = DateTimeOffset.Now;
             var author = new Signature("YABHT-B51", "YABHT-B51@no-reply.com", now);
             var commit = repository.Commit($"[YABHT] Automated backup at {now} ", author, author);
+
+            Push(repositoryConfiguration, repository);
         }
     }
 
+    private void Push(RepositoryConfiguration repositoryConfiguration, Repository repository)
+    {
+        foreach (var pushConfiguration in repositoryConfiguration.PushConfigurations)
+        {
+            _logger.Info($"Push to remote '{pushConfiguration.RemoteName}'");
+        }
+    }
 }
