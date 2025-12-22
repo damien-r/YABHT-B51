@@ -48,6 +48,32 @@ internal class RepositoriesManager
         foreach (var pushConfiguration in repositoryConfiguration.PushConfigurations)
         {
             _logger.Info($"Push to remote '{pushConfiguration.RemoteName}'");
+            var remote = repository.Network.Remotes[pushConfiguration.RemoteName];
+            if (remote == null)
+            {
+                _logger.Error($"Remote '{pushConfiguration.RemoteName}' not found in repository '{repositoryConfiguration.Name}'");
+                continue;
+            }
+
+            var options = new PushOptions();
+            if (!string.IsNullOrEmpty(pushConfiguration.Username))
+            {
+                options.CredentialsProvider = (_, _, _) => new UsernamePasswordCredentials
+                {
+                    Username = pushConfiguration.Username,
+                    Password = pushConfiguration.Password ?? string.Empty
+                };
+            }
+
+            try
+            {
+                var pushRefSpec = $"refs/heads/{repository.Head.FriendlyName}:refs/heads/{repository.Head.FriendlyName}";
+                repository.Network.Push(remote, pushRefSpec, options);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to push to remote '{pushConfiguration.RemoteName}'", ex);
+            }
         }
     }
 }
